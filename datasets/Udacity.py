@@ -28,23 +28,10 @@ class UdacityDataset(Dataset):
         :param index:
         :return:
         """
-        path_image_steer, path_image_speed, path_label_speed_steer = self.img_info[index]
+        path_image_steer, path_label_speed_steer = self.img_info[index]
 
         image_use = []
-        speed_use = []
         steer_use = []
-        
-        for i in range(len(path_image_speed)):
-            img = Image.open(path_image_speed[i][0]).convert('RGB')
-            if self.transform is not None:
-                img = self.transform(img)
-            image_use.append(img)
-            #   print("speed_steer_test_path", path_image_speed[i])
-            with open(path_image_speed[i][1], encoding='utf-8') as file:
-                content = file.read()
-                content.rstrip()
-            speed_use.append(float(content))
-
         for i in range(len(path_image_steer)):
             img = Image.open(path_image_steer[i][0]).convert('RGB')
             if self.transform is not None:
@@ -69,7 +56,7 @@ class UdacityDataset(Dataset):
                 content.rstrip()
             steer_label.append(float(content))
 
-        return image_use, speed_use, steer_use, speed_label, steer_label
+        return image_use, steer_use, speed_label, steer_label
 
     def __len__(self):
         if len(self.img_info) == 0:

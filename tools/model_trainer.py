@@ -21,7 +21,7 @@ class ModelTrainer(object):
 
 
         for i, data in enumerate(data_loader):
-            image_use, speed_use, speed_label, steer_label = data
+            image_use, speed_use, steer_use, speed_label, steer_label = data
             optimizer.zero_grad()
             # 准备输入序列
             img_sequence = torch.stack(image_use).transpose(0, 1).to(device)
@@ -29,6 +29,9 @@ class ModelTrainer(object):
             speed_use = torch.stack(speed_use)
             speed_use = torch.unsqueeze(speed_use, dim=1)
             speed_use = speed_use.permute(2, 0, 1).float().to(device)
+            steer_use = torch.stack(steer_use)
+            steer_use = torch.unsqueeze(steer_use, dim=1)
+            steer_use = steer_use.permute(2, 0, 1).float().to(device)
             predictions_speed, predictions_steer = model(img_sequence, speed_use)
             speed_label = torch.stack(speed_label).permute(1,0).to(device)
             steer_label = torch.stack(steer_label).permute(1,0).to(device)
